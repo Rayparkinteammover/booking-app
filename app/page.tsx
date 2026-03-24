@@ -21,7 +21,7 @@ export default function Page() {
   useEffect(() => {
     const q = query(
       collection(db, "reservations"),
-      orderBy("createdAt", "desc")
+      orderBy("date","asc")
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -83,23 +83,26 @@ export default function Page() {
       </button>
 
       {/* 🔥 예약 목록 */}
+     <div className="mt-4 space-y-2">
+  {reservations.map((item) => (
+    <div
+      key={item.id}
+      className="flex justify-between items-center p-3 bg-gray-50 rounded-lg shadow-sm"
+    >
       <div>
-        {reservations.map((item) => (
-          <div
-            key={item.id}
-            className="flex justify-between items-center border-b py-2"
-          >
-            <div>
-              {item.name} - {item.date}
-            </div>
-            <button
-              onClick={() => handleDelete(item.id)}
-              className="text-red-500"
-            >
-              삭제
-            </button>
-          </div>
-        ))}
+        <div className="font-semibold">{item.name}</div>
+        <div className="text-sm text-gray-500">{item.date}</div>
+      </div>
+
+      <button
+        onClick={() => handleDelete(item.id)}
+        className="text-red-500 text-sm hover:underline"
+      >
+        삭제
+      </button>
+    </div>
+  ))}
+</div>
       </div>
     </div>
   );
