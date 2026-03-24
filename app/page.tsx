@@ -103,6 +103,13 @@ export default function Page() {
     </div>
   ))}
 </div>
+await addDoc(collection(db, "reservations"), {
+  name,
+  date,
+  createdAt: new Date(),
+});
+
+alert("예약 완료!"); //
       </div>
     </div>
   );
