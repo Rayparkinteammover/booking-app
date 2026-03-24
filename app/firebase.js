@@ -1,14 +1,15 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBTzhugHaCNAUKgHUphZT2L9yhEIS0Wt6I",
-  authDomain: "booking-app-465e4.firebaseapp.com",
-  projectId: "booking-app-465e4",
-  storageBucket: "booking-app-465e4.firebasestorage.app",
-  messagingSenderId: "189934759712",
-  appId: "1:189934759712:web:707cd80d7439bc4ff6f145"
+  // 본인 config
 };
 
 const app = initializeApp(firebaseConfig);
+
 export const db = getFirestore(app);
+
+// ⭐ 추가
+export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider();
