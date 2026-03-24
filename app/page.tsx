@@ -15,9 +15,10 @@ import {
 export default function Page() {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
+  const [time, setTime] = useState(""); // ⭐ 시간 추가
   const [reservations, setReservations] = useState<any[]>([]);
 
-  // 🔥 실시간 데이터 불러오기
+  // 🔥 데이터 불러오기
   useEffect(() => {
     const q = query(
       collection(db, "reservations"),
@@ -37,7 +38,7 @@ export default function Page() {
 
   // ✅ 예약 추가
   const handleSubmit = async () => {
-    if (!name || !date) {
+    if (!name || !date || !time) {
       alert("모든 값을 입력하세요");
       return;
     }
@@ -45,15 +46,17 @@ export default function Page() {
     await addDoc(collection(db, "reservations"), {
       name,
       date,
+      time, // ⭐ 저장
       createdAt: new Date(),
     });
 
     alert("예약 완료!");
     setName("");
     setDate("");
+    setTime(""); // ⭐ 초기화
   };
 
-  // ❌ 예약 삭제
+  // ❌ 삭제
   const handleDelete = async (id: string) => {
     await deleteDoc(doc(db, "reservations", id));
   };
@@ -76,6 +79,14 @@ export default function Page() {
         onChange={(e) => setDate(e.target.value)}
       />
 
+      {/* ⭐ 시간 입력 */}
+      <input
+        className="w-full border p-2 mb-3 rounded"
+        type="time"
+        value={time}
+        onChange={(e) => setTime(e.target.value)}
+      />
+
       <button
         onClick={handleSubmit}
         className="w-full bg-blue-500 text-white p-2 rounded mb-4"
@@ -83,7 +94,7 @@ export default function Page() {
         예약하기
       </button>
 
-      {/* 🔥 예약 목록 */}
+      {/* 🔥 리스트 */}
       <div className="mt-4 space-y-2">
         {reservations.map((item) => (
           <div
@@ -92,7 +103,9 @@ export default function Page() {
           >
             <div>
               <div className="font-semibold">{item.name}</div>
-              <div className="text-sm text-gray-500">{item.date}</div>
+              <div className="text-sm text-gray-500">
+                {item.date} {item.time}
+              </div>
             </div>
 
             <button
