@@ -21,7 +21,7 @@ export default function Page() {
   useEffect(() => {
     const q = query(
       collection(db, "reservations"),
-      orderBy("date","asc")
+      orderBy("date", "asc")
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -48,6 +48,7 @@ export default function Page() {
       createdAt: new Date(),
     });
 
+    alert("예약 완료!");
     setName("");
     setDate("");
   };
@@ -77,45 +78,32 @@ export default function Page() {
 
       <button
         onClick={handleSubmit}
-const handleSubmit = async () => {
-  if (!name || !date) {
-    alert("모든 값을 입력하세요");
-    return;
-  }
-
-  await addDoc(collection(db, "reservations"), {
-    name,
-    date,
-    createdAt: new Date(),
-  });
-
-  alert("예약 완료!"); // ✅ 여기
-  setName("");
-  setDate("");
-};
         className="w-full bg-blue-500 text-white p-2 rounded mb-4"
       >
         예약하기
       </button>
 
       {/* 🔥 예약 목록 */}
-     <div className="mt-4 space-y-2">
-  {reservations.map((item) => (
-    <div
-      key={item.id}
-      className="flex justify-between items-center p-3 bg-gray-50 rounded-lg shadow-sm"
-    >
-      <div>
-        <div className="font-semibold">{item.name}</div>
-        <div className="text-sm text-gray-500">{item.date}</div>
-      </div>
+      <div className="mt-4 space-y-2">
+        {reservations.map((item) => (
+          <div
+            key={item.id}
+            className="flex justify-between items-center p-3 bg-gray-50 rounded-lg shadow-sm"
+          >
+            <div>
+              <div className="font-semibold">{item.name}</div>
+              <div className="text-sm text-gray-500">{item.date}</div>
+            </div>
 
-      <button
-        onClick={() => handleDelete(item.id)}
-        className="text-red-500 text-sm hover:underline"
-      >
-        삭제
-      </button>
+            <button
+              onClick={() => handleDelete(item.id)}
+              className="text-red-500 text-sm hover:underline"
+            >
+              삭제
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
-  ))}
+  );
 }
