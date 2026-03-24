@@ -20,6 +20,15 @@ export default function Page() {
   const [time, setTime] = useState("");
   const [reservations, setReservations] = useState<any[]>([]);
 
+  // ⭐ 예약 가능 시간 리스트 (30분 단위)
+  const timeOptions = [
+    "09:00","09:30","10:00","10:30",
+    "11:00","11:30","12:00","12:30",
+    "13:00","13:30","14:00","14:30",
+    "15:00","15:30","16:00","16:30",
+    "17:00","17:30","18:00"
+  ];
+
   // 🔥 데이터 불러오기
   useEffect(() => {
     const q = query(
@@ -38,16 +47,10 @@ export default function Page() {
     return () => unsubscribe();
   }, []);
 
-  // ✅ 예약 추가 (중복 + 시간 제한)
+  // ✅ 예약 추가
   const handleSubmit = async () => {
     if (!name || !date || !time) {
       alert("모든 값을 입력하세요");
-      return;
-    }
-
-    // ⭐ 시간 제한 체크 (09:00 ~ 18:00)
-    if (time < "09:00" || time > "18:00") {
-      alert("예약 가능 시간은 09:00 ~ 18:00 입니다 ⏰");
       return;
     }
 
@@ -65,7 +68,6 @@ export default function Page() {
       return;
     }
 
-    // ✅ 저장
     await addDoc(collection(db, "reservations"), {
       name,
       date,
@@ -102,12 +104,19 @@ export default function Page() {
         onChange={(e) => setDate(e.target.value)}
       />
 
-      <input
+      {/* ⭐ 시간 드롭다운 */}
+      <select
         className="w-full border p-2 mb-3 rounded"
-        type="time"
         value={time}
         onChange={(e) => setTime(e.target.value)}
-      />
+      >
+        <option value="">시간 선택</option>
+        {timeOptions.map((t) => (
+          <option key={t} value={t}>
+            {t}
+          </option>
+        ))}
+      </select>
 
       <button
         onClick={handleSubmit}
