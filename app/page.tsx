@@ -77,6 +77,22 @@ export default function Page() {
 
       <button
         onClick={handleSubmit}
+const handleSubmit = async () => {
+  if (!name || !date) {
+    alert("모든 값을 입력하세요");
+    return;
+  }
+
+  await addDoc(collection(db, "reservations"), {
+    name,
+    date,
+    createdAt: new Date(),
+  });
+
+  alert("예약 완료!"); // ✅ 여기
+  setName("");
+  setDate("");
+};
         className="w-full bg-blue-500 text-white p-2 rounded mb-4"
       >
         예약하기
@@ -102,15 +118,4 @@ export default function Page() {
       </button>
     </div>
   ))}
-</div>
-await addDoc(collection(db, "reservations"), {
-  name,
-  date,
-  createdAt: new Date(),
-});
-
-alert("예약 완료!"); //
-      </div>
-    </div>
-  );
 }
